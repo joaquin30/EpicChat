@@ -2,6 +2,9 @@
 
 import asyncio
 import sys
+import json
+import datetime
+
 from websockets.sync.client import connect
 
 # def hello():
@@ -13,6 +16,12 @@ from websockets.sync.client import connect
 
 
 def main():
+
+    username = sys.argv[1]
+    interlocutor = sys.argv[2]
+    #for easy local tests
+    #username =  'alina'
+    #interlocutor = 'joaquin'
 
     while True:
         commands = input('EpicChat > ').split()
@@ -27,9 +36,28 @@ def main():
             #msg = input(f'To {commands[1]}: ')
             msg = input('Type message and press Enter:\n>')
             print(msg)
-            #write(msg)
+
+            write(msg, username,interlocutor )
         else:
             print('Command not recognized')
+
+def write(msg, username, interlocutor):
+    new_json = {
+        "type": "JM01",
+        "from": username,
+        "to": interlocutor,
+        "timestamp": str(datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)),
+        #todo local_id
+        "local_id": 1,
+        "content": msg
+    }
+    y = json.dumps(new_json)
+    #todo add msg to database
+    print(y)
+
+def read (username, interlocutor)
+
+
 
 if __name__ == '__main__':
     main()
