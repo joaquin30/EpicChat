@@ -13,8 +13,9 @@ from websockets.sync.client import connect
 
 
 def main():
+
     while True:
-        commands = input('EpicChat> ').split()
+        commands = input('EpicChat > ').split()
         if len(commands) > 2:
             print('Command not recognized')
         elif len(commands) == 1 and (commands[0] == 'quit' or commands[0] == 'q'):
@@ -23,7 +24,8 @@ def main():
             #read()
             print("Reading..")
         elif commands[0] == 'write' or commands[0] == 'w':
-            msg = input(f'To {commands[1]}: ')
+            #msg = input(f'To {commands[1]}: ')
+            msg = input('Type message and press Enter:\n>')
             print(msg)
             #write(msg)
         else:
