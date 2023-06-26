@@ -5,23 +5,26 @@ import sys
 import json
 import datetime
 
+import db_connection as db
+
 from websockets.sync.client import connect
 
 # def hello():
-#     with connect(f"ws://localhost:8765/?user={sys.argv[1]}") as websocket:
-#         websocket.send("Hello world!")
+#     with connect(f'ws://localhost:8765/?user={sys.argv[1]}') as websocket:
+#         websocket.send('Hello world!')
 #         return 
 #         message = websocket.recv()
-#         print(f"Received: {message}")
+#         print(f'Received: {message}')
 
 
 def main():
-
-    username = sys.argv[1]
-    interlocutor = sys.argv[2]
+    #todo
+    #username = sys.argv[1]
+    #interlocutor = sys.argv[2]
     #for easy local tests
-    #username =  'alina'
-    #interlocutor = 'joaquin'
+    username =  'alina' #alina
+    interlocutor = 'joaquin' #joaquin
+
 
     while True:
         commands = input('EpicChat > ').split()
@@ -30,8 +33,9 @@ def main():
         elif len(commands) == 1 and (commands[0] == 'quit' or commands[0] == 'q'):
             break
         elif commands[0] == 'read' or commands[0] == 'r':
-            #read()
-            print("Reading..")
+            db.read(username, interlocutor)
+            print('Reading..')
+
         elif commands[0] == 'write' or commands[0] == 'w':
             #msg = input(f'To {commands[1]}: ')
             msg = input('Type message and press Enter:\n>')
@@ -43,19 +47,19 @@ def main():
 
 def write(msg, username, interlocutor):
     new_json = {
-        "type": "JM01",
-        "from": username,
-        "to": interlocutor,
-        "timestamp": str(datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)),
+        'type': 'JM01',
+        'from': username,
+        'to': interlocutor,
+        'timestamp': str(datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)),
         #todo local_id
-        "local_id": 1,
-        "content": msg
+        'local_id': 1,
+        'content': msg
     }
-    y = json.dumps(new_json)
     #todo add msg to database
-    print(y)
+    db.write(new_json)
+    #print(json.dumps(new_json))
 
-def read (username, interlocutor)
+
 
 
 
