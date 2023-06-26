@@ -18,12 +18,12 @@ from websockets.sync.client import connect
 
 
 def main():
-    #todo
-    #username = sys.argv[1]
-    #interlocutor = sys.argv[2]
+
+    username = sys.argv[1]
+    interlocutor = sys.argv[2]
     #for easy local tests
-    username =  'alina' #alina
-    interlocutor = 'joaquin' #joaquin
+    #username =  'alina' #alina
+    #interlocutor = 'joaquin' #joaquin
 
 
     while True:
@@ -47,13 +47,11 @@ def main():
 
 def write(msg, username, interlocutor):
     new_json = {
-        'type': 'JM01',
         'from': username,
         'to': interlocutor,
         'timestamp': str(datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)),
-        #todo local_id
-        'local_id': 1,
-        'content': msg
+        'content': msg,
+        'status': 'sent',
     }
     #todo add msg to database
     db.write(new_json)
