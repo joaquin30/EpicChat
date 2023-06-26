@@ -14,8 +14,8 @@ def write(message):
     #print(res)
 
 def read( username1, username2):
-    mydoc1 = coll.find({'from': username1})
-    mydoc2 = coll.find({'from': username2})
+    mydoc1 = coll.find({'from': username1, 'to': username2})
+    mydoc2 = coll.find({'from': username2, 'to': username1})
     mydoc = []
     for x in mydoc2:
          mydoc.append(x)
