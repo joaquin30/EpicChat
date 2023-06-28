@@ -26,10 +26,10 @@ def makeMessage(msg, username, interlocutor):
 def showMessages(user1, user2):
     db.read(user1, user2)
 
-def confirmation(of, conf_id):
+def confirmation(conf_of, conf_id):
     json_msg = {
         'type': 'JM05',
-        'confirmation_of': of,
+        'confirmation_of': conf_of,
         'confirmation_id': conf_id
     }
     return json.dumps(json_msg)
@@ -37,12 +37,22 @@ def confirmation(of, conf_id):
 async def processInput(websocket, username):
     while True:
         commands = (await aioconsole.ainput('EpicChat> ')).split()
-        if len(commands) > 2:
-            print('Command not recognized')
-        elif len(commands) == 0:
+        if len(commands) == 0:
             continue
         elif len(commands) == 1 and (commands[0] == 'quit' or commands[0] == 'q'):
-            break
+            try:
+                loop = asyncio.get_event_loop()
+                for task in asyncio.all_tasks(loop):
+                    task.cancel()
+                # ~ loop.stop()
+            except:
+                break
+        elif len(commands) == 1 and (commands[0] == 'help' or commands[0] == 'h'):
+            print('''Commands:
+    help: see this message
+    quit: quit the program
+    write <user>: send a message to <user>
+    read <user>: show all the messages between you and <user>''')
         elif len(commands) == 2 and (commands[0] == 'read' or commands[0] == 'r'):
             showMessages(username, commands[1])
         elif len(commands) == 2 and (commands[0] == 'write' or commands[0] == 'w'):
@@ -72,9 +82,12 @@ async def handleMessages(websocket):
 
 async def main(username):
     async with websockets.connect(f'ws://localhost:8765/?user={username}') as websocket:
-        asyncio.create_task(handleMessages(websocket))
-        asyncio.create_task(processInput(websocket, username))
-        await asyncio.Future() # run forever
+        try:
+            asyncio.create_task(handleMessages(websocket))
+            asyncio.create_task(processInput(websocket, username))
+            await asyncio.Future() # run forever
+        except:
+            pass
 
 if __name__ == '__main__':
     username = sys.argv[1]

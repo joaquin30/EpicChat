@@ -1,18 +1,20 @@
-import pymongo
+# ~ import pymongo
 import datetime
 import json
-from bson.objectid import ObjectId
+from montydb.types.objectid import ObjectId
+from montydb import set_storage, MontyClient
 
-# client = pymongo.MongoClient('mongodb://localhost:27017')
-# ~ client = pymongo.MongoClient('mongodb://127.0.0.1:27017/')
-# ~ client = pymongo.MongoClient('localhost', 27017)
-# ~ db = client.testdata
-# ~ coll = db.messages
+
 coll = None
 
 def initDB(user):
     global coll
-    client = pymongo.MongoClient('localhost', 27017)
+    # ~ client = pymongo.MongoClient('localhost', 27017)
+    set_storage("db",  # dir path for database to live on disk, default is {cwd}
+        storage="flatfile",     # storage name, default "flatfile"
+        mongo_version="4.0",    # try matching behavior with this mongodb version
+        use_bson=False)         # default None, and will import pymongo's bson if None or True
+    client = MontyClient("db")
     coll = client[user]['messages']
 
 
@@ -50,9 +52,9 @@ def read(username1, username2):
 
 
 def changeStatus(local_id, new_status):
-    print('statusss')
+    # ~ print('statusss')
     message_id = ObjectId(local_id)
-    message = coll.findOne({'_id': message_id})
+    message = coll.find_one({'_id': message_id})
     if message['status'] == 'sending' or (message['status'] == 'sent' and new_status == 'received'):
-        message = coll.updateOne({'_id': message_id}, {'status': new_status})
+        message = coll.update_one({'_id': message_id}, {'$set': {'status': new_status}})
 
