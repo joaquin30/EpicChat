@@ -16,6 +16,6 @@
 
 
 
-<h2>Documentation:</h2>
+<h2>Documentation</h2>
 https://docs.google.com/document/d/1EA3CdPCCiu97J_3snWuZ16YeNFw74pIhlri5015VedI
 
